@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="{% static 'css/bootstrap.css' %}" type="text/css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Sofia' rel='stylesheet'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <style>
+body {
+    font-family: 'Sofia';font-size: 22px;
+}
+</style>
+    <script>
+        function filterusers(value){
+             var xml=new XMLHttpRequest();
+        xml.onreadystatechange=function () {
+            if(xml.readyState==4 && xml.status==200){
+                  var response=JSON.parse(xml.response);
+                if(response.length==0){
+                   document.getElementById('divorders').innerHTML="<h4>No any Data present with this Date</h4>";
+                }
+                else{
+                     console.log(response);
+                var ans="";
+                ans+="<table style='color: greenyellow' class=\"table table-striped\">\n" +
+                    "                <thead>\n" +
+                    "                  <tr>\n" +
+                    "                    <th>UID</th>\n" +
+                    "                    <th>Name</th>\n" +
+                    "                    <th>Gender</th>\n" +
+                    "                    <th>YOB</th>\n" +
+                    "                    <th>Guardian Name</th>\n" +
+                    "                    <th>Relation</th>\n" +
+                    "                    <th>House</th>\n" +
+                    "                    <th>Street</th>\n" +
+                    "                    <th>VTC</th>\n" +
+                    "                    <th>Post Office</th>\n" +
+                    "                    <th>Distict</th>\n" +
+                    "                    <th>Subdistict</th>\n" +
+                    "                    <th>state</th>\n" +
+                    "                    <th>Pin Code</th>\n" +
+                    "                    <th>DOB</th>\n" +
+                    "                  </tr>\n" +
+                    "                </thead>";
+
+                    if (value!=null){
+                    for (var i = 0; i < response.length; i++) {
+                        console.log(response[i][0]);
+
+                        ans += "<h6><tr style=\"color: gold\"><td>" + response[i][0] + "</td><td>" + response[i][1] + "</td><td>" + response[i][2] + "</td><td>" + response[i][3] + "</td><td>" + response[i][4] + "</td><td>" + response[i][5] + "</td><td>" + response[i][6] + "</td><td>" + response[i][7] + "</td><td>" + response[i][8] + "</td><td>" + response[i][9] + "</td><td>" + response[i][10] + "</td><td>" + response[i][11] + "</td><td>" + response[i][12] + "</td><td>" + response[i][13] + "</td><td>" + response[i][14] + "</td></tr></h6>";
+
+                    }}
+                    else{
+                        ans += "<tr><td>" + "--" + "</td><td>" + "--" + "</td><td>" + "--"+ "</td><td>" + "--" + "</td><td>" +"--" + "</td><td>" +"--" + "</td><td>" + "--" + "</td><td>" + "--" + "</td><td>" + "--"+ "</td><td>" + "--"+ "</td><td>" + "--" + "</td><td>" + "--" + "</td><td>" + "--" + "</td><td>" + "--" + "</td><td>" + "--" + "</td></tr>";
+
+
+                    }
+
+
+                    ans += "</table>";
+
+
+                document.getElementById('detail').innerHTML=ans;
+                }
+
+            }
+        };
+        xml.open('GET','viewfilteruser?value='+value,true);
+        xml.send();
+        }
+    </script>
+</head>
+<body style="background-image: url({% static '/media/images/background.jpg' %});background-repeat: no-repeat; background-size: cover">
+<div class="container-fluid">
+    <marquee width="100%" direction="left" height="60px">
+    <h1 style="color: gold">  <p style="color: gold">USER ENTERY DETAILS</p></h1>
+</marquee>
+
+
+    <div class="container-fluid">
+  <div class="container-fluid">
+            <div class="form-group" style="color: gold">
+                <h1>Enter Date(in YYYY-MM-DD Format)</h1>
+                <input class="form-control mr-sm-2" type="text" placeholder="Search" onkeyup="filterusers(this.value)">
+            </div>
+            <div id="detail" style="color: gold">
+
+        </div>
+              </div>
+            </div>
+            </div>
+</body>
+</html>

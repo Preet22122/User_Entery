@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>UserEntery</title>
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <script>
+        function data() {
+            var xml=new XMLHttpRequest();
+            xml.onreadystatechange=function () {
+            if(xml.readyState==4 && xml.status==200){
+                var response=JSON.parse(xml.response);
+                if(response.length==0){
+                   document.getElementById('data').innerHTML="<h4>User Already Present with Same ID</h4>";
+                }
+                else{
+                     console.log(response);
+                var ans="";
+                ans+="<table class=\"table table-striped\">\n" +
+                    "                <thead>\n" +
+                    "                  <tr>\n" +
+                    "                    <th>UID</th>\n" +
+                    "                    <th>Name</th>\n" +
+                    "                    <th>Gender</th>\n" +
+                    "                    <th>YOB</th>\n" +
+                        "                    <th>Guardian Name</th>\n" +
+                        "                    <th>Relation</th>\n" +
+                        "                    <th>House</th>\n" +
+                        "                    <th>Street</th>\n" +
+                        "                    <th>VTC</th>\n" +
+                        "                    <th>Post Office</th>\n" +
+                        "                    <th>Distict</th>\n" +
+                        "                    <th>Subdistict</th>\n" +
+                        "                    <th>state</th>\n" +
+                        "                    <th>Pin Code</th>\n" +
+                        "                    <th>DOB</th>\n" +
+                    "                  </tr>\n" +
+                    "                </thead>";
+
+
+                    for (var i = 0; i < response.length; i++) {
+                        console.log(response[0].uid);
+                        ans += "<tr><td>" + response[0].uid+ "</td><td>" + response[0].name + "</td><td>" + response[0].gender + "</td><td>" + response[0].yob + "</td><td>" + response[0].gname + "</td><td>" + response[0].co + "</td><td>" + response[0].house + "</td><td>" + response[0].street + "</td><td>" + response[0].vtc + "</td><td>" + response[0].po + "</td><td>" + response[0].dist + "</td><td>" + response[0].subdist + "</td><td>" + response[0].state + "</td><td>" + response[0].pc+ "</td><td>" + response[0].dob + "</td></tr>";
+                    }
+                                        ans += "<tr><td>" +"--"+ "</td><td>" + "--" + "</td><td>" + "--" + "</td></tr>";
+                    ans += "</table>";
+                document.getElementById('data').innerHTML=ans;
+                }
+            }
+        };
+        xml.open("GET", "scan", true);
+        xml.send();
+        }
+        function add() {
+            var xml=new XMLHttpRequest();
+            xml.onreadystatechange=function () {
+            if(xml.readyState==4 && xml.status==200){
+                alert("----Added Successfully----")
+                }
+            }
+        xml.open("GET", "add", true);
+        xml.send();
+        }
+        ////////////////////////////////////////////////////////////////////
+
+        function addUser(){
+        var formdata=new FormData();
+        var controls=document.getElementById('form1').elements;
+        var count=0;
+        for(var i=0;i<controls.length;i++){
+            if(controls[i].value=="" || controls[i].name==null){
+                count=1;
+            }
+            formdata.append(controls[i].name,controls[i].value);
+            //alert(controls[i].type+" "+controls[i].name+" "+controls[i].value);
+
+        }
+        if(count==1){
+            alert('give name to all controls');
+        }
+
+        else{
+
+            var xml=new XMLHttpRequest();
+        xml.onreadystatechange=function () {
+            if(xml.readyState==4 && xml.status==200){
+                var response=xml.responseText.trim();
+                if(response=="success"){
+                    alert('User addedd successfully');
+                }
+                else
+                {
+                    alert("Error while Adding User");
+                }
+            }
+        };
+       xml.open("POST","add", true);
+        xml.send(formdata);
+        }}
+
+    </script>
+</head>
+<body style="background-image: url({% static '/media/images/background.jpg' %});background-repeat: no-repeat; background-size: cover">
+<div class="container-fluid">
+  <h1>  <p class="bg-danger text-white">Welcome to User Entery Dshboard</p></h1>
+   <h>  <p class="bg-info text-white">*Note this Software is used as a User Entery using  Old Aadhar card QR Code or from Manual input. You Can Make Changes to code for changing From Old Aadhar card to Any other QR Code ID According to need.(Note: Response from QR is in XML form)</p></h>
+</div>
+<!-------------------------------------------------->
+<div class="container-fluid">
+    <div class="container-fluid">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-3 col-md-6 col-lg-4 bg-success">
+         <input type="button"  value="SCAN QR CODE" onclick="data()" class="btn btn-warning">
+          <h5 style="color: gold">*Note: Card should be in Good Condition , Such that QR Scanned Without Any Error </h5>
+
+      </div>
+      <div class="col-sm-9 col-md-6 col-lg-8 bg-warning">
+           <h3><- Click to scan User Entery Details from Aadhar Card</h3>
+               </div>
+                </div>
+              </div>
+            </div>
+            </div>
+<!------------------------------------------------->
+ <div id="data" style="margin: 10px;"></div>
+<!-------------------------------------------------->
+<div class="container-fluid">
+    <div class="container-fluid">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-3 col-md-6 col-lg-4 bg-success">
+         <h3 style="color: gold">1.Enter User Details to fill Form Manually</h3>
+          <h3 style="color: gold">2. QR Scanning Instructions :</h3>
+          <h4 style="color: gold">-->Click on Button SCAN QR CODE</h4>
+          <h4 style="color: gold">-->Put your CARD QR CODE front of the Camera</h4>
+          <h4 style="color: gold">-->If Data Already Exist It Will Show Alredy Present Otherwise Show Data in table on Adding</h4>
+
+
+      </div>
+      <div class="col-sm-9 col-md-6 col-lg-8 bg-warning">
+           <form id="form1">
+
+            <div class="form-group">
+                Enter Adhar ID
+            <input type="text" class="form-control" name="textbox1">
+            </div>
+
+            <div class="form-group">
+                Enter Name
+                <input type="text" class="form-control" name="textbox2">
+            </div>
+            <div class="form-group">
+                Enter Gender
+                <input type="text" class="form-control" name="textbox3">
+            </div>
+        <div class="form-group">
+                Enter Year of Birth
+                <input type="text" class="form-control" name="textbox4">
+            </div>
+            <div class="form-group">
+                Enter Gurdian Name
+                <input type="text" class="form-control" name="textbox5">
+            </div>
+            <div class="form-group">
+                Enter Care of Name (ex. Father)
+                <input type="text" class="form-control" name="textbox6">
+            </div>
+            <div class="form-group">
+                Enter House
+                <input type="text" class="form-control" name="textbox7">
+            </div>
+        <div class="form-group">
+                Enter Street
+                <input type="text" class="form-control" name="textbox8">
+            </div>
+        <div class="form-group">
+                Enter VTC (Village/Town/City)
+                <input type="text" class="form-control" name="textbox9">
+            </div>
+        <div class="form-group">
+                Enter Post Office
+                <input type="text" class="form-control" name="textbox10">
+            </div>
+        <div class="form-group">
+                Enter District
+                <input type="text" class="form-control" name="textbox11">
+            </div>
+        <div class="form-group">
+                Enter SubDistrict
+                <input type="text" class="form-control" name="textbox12">
+            </div>
+        <div class="form-group">
+                Enter State
+                <input type="text" class="form-control" name="textbox13">
+            </div>
+        <div class="form-group">
+                Enter Pincode
+                <input type="text" class="form-control" name="textbox14">
+            </div>
+        <div class="form-group">
+                Enter Date Of Birth(DD/MM/YYYY)
+                <input type="text" class="form-control" name="textbox15">
+            </div>
+
+            <div class="form-group">
+                <input type="button" name="btn" class="btn btn-danger" value="ADD" onclick="addUser()" >
+            </div>
+    </form>
+               </div>
+                </div>
+              </div>
+            </div>
+            </div>
+<!------------------------------------------------->
+
+</body>
+</html>
